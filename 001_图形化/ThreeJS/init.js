@@ -1,0 +1,1 @@
+(function () { var script = document.createElement('script'); script.onload = function () { var stats = new Stats(); document.body.appendChild(stats.dom); requestAnimationFrame(function loop() { stats.update(); requestAnimationFrame(loop) }); }; script.src = '../../../000_lib/stats.js/stats.min.js'; document.head.appendChild(script); })()

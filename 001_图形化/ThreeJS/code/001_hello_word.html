@@ -4,53 +4,49 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-
+    <script src="../init.js"></script>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+        }
+    </style>
 </head>
 
 <body>
-
 </body>
-
 </html>
 <script src="../../../000_lib/three/102/three.js"></script>
+
 <script>
-    (function () { var script = document.createElement('script'); script.onload = function () { var stats = new Stats(); document.body.appendChild(stats.dom); requestAnimationFrame(function loop() { stats.update(); requestAnimationFrame(loop) }); }; script.src = '../../../000_lib/stats.js/stats.min.js'; document.head.appendChild(script); })()
 
-</script>
-<script>
-    var renderer, camera, scene, geometry, material, mesh;
-    function initRenderer() {
-        renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight)
-        document.body.appendChild(renderer.domElement)
-    }
+    // const scene = new THREE.Scene();
+    // const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+    //
+    // const renderer = new THREE.WebGLRenderer();
+    // renderer.setSize( window.innerWidth, window.innerHeight );
+    // document.body.appendChild( renderer.domElement );
+    // const geometry = new THREE.BoxGeometry();
+    // const material = new THREE.MeshBasicMaterial( { color: 'red' } );
+    // const cube = new THREE.Mesh( geometry, material );
+    // scene.add( cube );
+    //
+    // camera.position.z = 5;
+    // function animate() {
+    //     requestAnimationFrame( animate );
+    //     cube.rotation.x += 0.01;
+    //     cube.rotation.y += 0.01;
+    //     renderer.render( scene, camera );
+    // }
+    // animate();
 
-    function initScene() {
-        scene = new THREE.Scene()
-    }
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    document.body.appendChild( renderer.domElement );
 
-    function initCamrea() {
-        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 2000)
-        camera.position.set(0, 0, 15)
-    }
+    const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 500 );
+    camera.position.set( 0, 0, 100 );
+    camera.lookAt( 0, 0, 0 );
 
-    function initMesh() {
-        geometry = new THERE.BoxGeometry(2, 2, 2)
-        material = new THERE.MeshNormalMateial()
-        mesh = new THREE.Mesh(geometry, material)
-        scene.add(mesh)
-    }
-    function animate() {
-        requestAnimationFrame(animate)
-        mesh.rotation.x += 0.01
-        mesh.rotation.y += 0.02
-        renderer.render(scene, camera)
-    }
-    function init() {
-        initRenderer()
-        initScene()
-        initCamrea()
-        initMesh()
-        animate()
-    }
+    const scene = new THREE.Scene();
 </script>
