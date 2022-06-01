@@ -12,8 +12,14 @@
 <div id="app"></div>
 <script>
     window.$docsify = {
-        name: '',
-        repo: ''
+        loadSidebar: true,
+        subMaxLevel: 15,
+        search: 'auto',
+        auto2top: true,
+        homepage: 'README.md',
+        // basePath: '/path/',
+        autoHeader: true,
+        mergeNavbar: true,
     }
 </script>
 <!-- Docsify v4 -->
@@ -21,10 +27,4 @@
 <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
 </body>
 </html>
-<script>
-    window.$docsify = {
-        loadSidebar: true,
-        subMaxLevel: 2,
-        search: 'auto',
-    }
-</script>
+
