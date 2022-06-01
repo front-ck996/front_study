@@ -1,0 +1,12 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+<script type="application/javascript" src="radar-data.js"></script>
+docker run --name=mindoc --restart=always -v /data/uploads:/mindoc/uploads -v /data/database:/data/database -e MINDOC_DB_ADAPTER=sqlite3 -e MINDOC_DB_DATABASE=./database/mindoc.db -e MINDOC_CACHE=true -e MINDOC_CACHE_PROVIDER=file -e MINDOC_ENABLE_EXPORT=true -e MINDOC_BASE_URL=https://www.iminho.me/wiki -p 8181:8181 -d registry.cn-hangzhou.aliyuncs.com/mindoc/mindoc:v2.0
