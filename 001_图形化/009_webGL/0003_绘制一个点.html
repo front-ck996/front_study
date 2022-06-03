@@ -2,40 +2,49 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <script src="WebGL-Programming-Guide/lib/webgl-utils.js"></script>
+    <script src="WebGL-Programming-Guide/lib/webgl-debug.js"></script>
+    <script src="WebGL-Programming-Guide/lib/webgl-utils.js"></script>
 </head>
 <body>
 <canvas id="canvas" style="height: 400px;width: 400px"></canvas>
 </body>
 </html>
+<script src="lib/cuon-utils.js"></script>
 <script>
-    var canvas =  document.getElementById('canvas')
-    var gl = canvas.getContext('webgl')
+    function main(){
+        var canvas = document.getElementById('canvas')
 
-    // 指定 清空canvas的颜色 openGL 使用的是0~1 作为颜色值
-    gl.clearColor(0.0, 0.0, 0.0, 1.0)
-
-    // 清空canvas
-    gl.clear(gl.COLOR_BUFFER_BIT)
-
-    // 顶点着色器
-    var VSHADER_SOURCE = `
+        // 获得gl对象
+        var gl = canvas.getContext('webgl')
+        // 顶点着色器
+        var VSHADER_SOURCE = `
         void main() {
             gl_Position = vec4(0.0, 0.0, 0.0, 1.0); // 设置坐标
             gl_PointSize = 10.0; 设置尺寸
         }
     `
-    // 片元着色器程序
-    var FSHADER_SOURCE = `
+        // 片元着色器程序
+        var FSHADER_SOURCE = `
         void main (){
             gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); // 设置颜色
         }
     `
-    // 初始化着色器
-    gl.createProgram()
-    gl.drawArrays(gl.POINTS, 0, 1)
+        if (!initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE)){
+            // console.log('Failed to get the rending context for WebGL')
+            console.log('Failed to initialize shaders')
+            return;
+        }
 
+        // 指定 清空canvas的颜色 openGL 使用的是0~1 作为颜色值
+        gl.clearColor(0.0, 0.0, 0.0, 1.0)
+
+        // 清空canvas
+        gl.clear(gl.COLOR_BUFFER_BIT)
+        // 初始化着色器
+        // gl.createProgram()
+        gl.drawArrays(gl.POINTS, 0, 1)
+    }
+    main()
 </script>
