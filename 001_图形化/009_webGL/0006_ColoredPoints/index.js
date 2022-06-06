@@ -50,7 +50,7 @@ function main() {
     }
     const u_FragColor = gl.getUniformLocation(gl.program, 'u_FragColor')
     if (u_FragColor < 0) {
-        console.log('Failed to get the storage location of u_FragColor')
+        console.log('Failed to get the u_FragColor variable' )
         return false
     }
     // 将顶点文职传输给attribute 变量
