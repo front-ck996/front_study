@@ -44,14 +44,15 @@ function main() {
 
     // 绘制
     // console.log(n)
-    gl.drawArrays(gl.TRIANGLES, 0 , n)
+    gl.drawArrays(gl.TRIANGLE_FAN, 0 , n)
 }
 
 function initVertexBuffers(gl) {
     const vertices = new Float32Array([
-        0.0, 0.5,
+        -0.5, 0.5,
         -0.5, -0.5,
-        0.5, -0.5
+        0.5, 0.5,
+        0.5,-0.5
     ])
     let n = vertices.length / 2
 
