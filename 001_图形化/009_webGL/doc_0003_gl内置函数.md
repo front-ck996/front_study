@@ -38,3 +38,5 @@ gl.ALPHA (0.0,0.0,0.0, 透明度)
 gl.LUMINANCE L,L,L,1L: 流明
 gl.LUMINANCE_ALPHA L,L,L, 透明度
 这里的流明(luminance) 表示我们感知到的物体表面的亮度, 通常使用物体的表面的红绿蓝颜色的分量值的加权平均来计算流明
+
+## gl.getShaderPrecisionFormat() 检测支持的精度
