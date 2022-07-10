@@ -4,3 +4,6 @@
 
 ## gl.drawArrays()
 ![](WebGL-Programming-Guide/images/img_5.png)
+
+## gl.vertexAttribPointer
+![](WebGL-Programming-Guide/images/img_6.png)
