@@ -1,9 +1,10 @@
 // 顶点着色器
 const VSHADER_SOURCE = `
     attribute vec4 a_Position;
+    attribute float a_PointSize;
     void main (){
         gl_Position=a_Position; // 设置坐标
-        gl_PointSize=10.0; // 设置尺寸
+        gl_PointSize=a_PointSize; // 设置尺寸
     }
 `
 
@@ -32,6 +33,7 @@ function main() {
         console.log('Failed to initialize shaders')
         return false
     }
+    // 设置顶点信息
     const n = initVertexBuffers(gl)
     if (n < 0) {
         console.log('Failed to set the positions of the vertices')
@@ -44,8 +46,7 @@ function main() {
     gl.clear(gl.COLOR_BUFFER_BIT)
 
     // 绘制
-    // console.log(n)
-    gl.drawArrays(gl.POINTS, 0 , n)
+    gl.drawArrays(gl.POINTS, 0, n)
 }
 
 function initVertexBuffers(gl) {
@@ -55,24 +56,36 @@ function initVertexBuffers(gl) {
         0.5, -0.5
     ])
     let n = vertices.length / 2
+    const sizes = new Float32Array(
+        [
+            10.0, 20.0, 30.0 // 点的尺寸
+        ]
+    )
 
     // 创建缓存区对象
     let vertexBuffer = gl.createBuffer()
+    let sizeBuff = gl.createBuffer()
+
     if (!vertexBuffer) {
         console.log('Failed to create the buffer object')
         return -1
     }
 
-    // 将缓存区对象绑定到目标
+    // 将顶点坐标写入缓存区对象并开启
     gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer)
-
     // 向缓存区写入对象写入数据
     gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW)
-
     let a_Position = gl.getAttribLocation(gl.program, 'a_Position')
     // 将缓存区对象分配给 a_Position 变量
     gl.vertexAttribPointer(a_Position, 2, gl.FLOAT, false, 0, 0)
     // 链接a_Position 变量与分配给他的缓存区对象
     gl.enableVertexAttribArray(a_Position)
-    return  n
+
+    // 将顶点尺寸写入缓存区对象并开启
+    gl.bindBuffer(gl.ARRAY_BUFFER, sizeBuff)
+    gl.bufferData(gl.ARRAY_BUFFER, sizes, gl.STATIC_DRAW)
+    let a_PointSize = gl.getAttribLocation(gl.program, 'a_PointSize')
+    gl.vertexAttribPointer(a_PointSize, 1, gl.FLOAT, false, 0, 0)
+    gl.enableVertexAttribArray(a_PointSize)
+    return n
 }
