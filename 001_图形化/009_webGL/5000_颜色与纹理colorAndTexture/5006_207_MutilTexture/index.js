@@ -52,7 +52,7 @@ function main() {
     let viewMatrix = new Matrix4()
     viewMatrix.setLookAt(0.20, 0.25, 0.25, 0,0,0,0,1,0)
     gl.uniformMatrix4fv(u_ViewMatrix, false, viewMatrix.elements)
-
+cv
     // 指定清空 canvas 的颜色
     gl.clearColor(0.0, 0.0, 0.0, 1.0)
 

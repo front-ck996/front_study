@@ -1,13 +1,13 @@
 // 顶点着色器
 const VSHADER_SOURCE = `
     attribute vec4 a_Position;
-    attribute float a_PointSize;
-    attribute vec2 a_TexCoord;
-    varying vec2 v_TexCoord; 
+    uniform mat4 u_ViewMatrix;
+    attribute vec4 a_Color;
+    varying vec4 v_Color;
     void main (){
-        gl_Position=a_Position; // 设置坐标
-        gl_PointSize=20.0; // 设置尺寸
-        v_TexCoord = a_TexCoord;
+        gl_Position=u_ViewMatrix * a_Position; // 设置坐标
+        gl_PointSize=10.0; // 设置尺寸
+        v_Color = a_Color;
     }
 `
 
@@ -15,14 +15,9 @@ const VSHADER_SOURCE = `
 const FSHADER_SOURCE = `
     // GLSL的精度限定符 https://www.jianshu.com/p/0e3f80467d46
     precision mediump float;
-    uniform sampler2D u_Sampler0; 
-    uniform sampler2D u_Sampler1; 
-    varying  vec2 v_TexCoord;
-   
+    varying vec4 v_Color;   
     void main(){
-        vec4 color0 = texture2D(u_Sampler0,v_TexCoord);
-        vec4 color1 = texture2D(u_Sampler1,v_TexCoord);
-        gl_FragColor = color0 * color1;
+        gl_FragColor = v_Color;
     }
 `
 
@@ -50,11 +45,13 @@ function main() {
         console.log('Failed to set the positions of the vertices')
         return false
     }
+    // 获取变量存储位置
+    let u_ViewMatrix = gl.getUniformLocation(gl.program, 'u_ViewMatrix')
+    let viewMatrix = new Matrix4();
+    viewMatrix.setLookAt(0.25, 0.25,0.25, 0,0,0,0,1, 0)
 
-    // 设置纹理
-    if (!initTexTrues(gl, n)) {
-
-    }
+    // 将视图矩阵传给u_ViewMatrix
+    gl.uniformMatrix4fv(u_ViewMatrix, false, viewMatrix.elements)
 
     // 指定清空 canvas 的颜色
     gl.clearColor(0.0, 0.0, 0.0, 1.0)
@@ -68,95 +65,47 @@ function main() {
 }
 
 function initVertexBuffers(gl) {
-    const vertexTexCoord = new Float32Array([
+    const vertexTexColors = new Float32Array([
         // 顶点坐标和 纹理坐标
-        -0.5, 0.5, 0.0, 1.0,
-        -0.5, -0.5, 0.0, 0.0,
-        0.5, 0.5, 1.0, 1.0,
-        0.5, -0.5, 1.0, 0.0,
+        0.0,  0.5,  -0.4,  0.4,  1.0,  0.4, // The back green one
+        -0.5, -0.5,  -0.4,  0.4,  1.0,  0.4,
+        0.5, -0.5,  -0.4,  1.0,  0.4,  0.4,
+
+        0.5,  0.4,  -0.2,  1.0,  0.4,  0.4, // The middle yellow one
+        -0.5,  0.4,  -0.2,  1.0,  1.0,  0.4,
+        0.0, -0.6,  -0.2,  1.0,  1.0,  0.4,
+
+        0.0,  0.5,   0.0,  0.4,  0.4,  1.0,  // The front blue one
+        -0.5, -0.5,   0.0,  0.4,  0.4,  1.0,
+        0.5, -0.5,   0.0,  1.0,  0.4,  0.4
+
     ])
     // 顶点数量
-    let n = 4
+    let n = 9
 
     // 创建缓存区对象
-    let vertexTexCoordBuffer = gl.createBuffer()
+    let vertexColorBuffer = gl.createBuffer()
 
     // 将顶点坐标和纹理坐标写入缓冲区对象
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexTexCoordBuffer)
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexColorBuffer)
     // 向缓存区写入对象写入数据
-    gl.bufferData(gl.ARRAY_BUFFER, vertexTexCoord, gl.STATIC_DRAW)
+    gl.bufferData(gl.ARRAY_BUFFER, vertexTexColors, gl.STATIC_DRAW)
 
     // BYTES_PER_ELEMENT 每个元素所占的字节数
-    let FSIZE = vertexTexCoord.BYTES_PER_ELEMENT
+    let FSIZE = vertexTexColors.BYTES_PER_ELEMENT
     let a_Position = gl.getAttribLocation(gl.program, 'a_Position')
     // 将缓存区对象分配给 a_Position 变量
-    gl.vertexAttribPointer(a_Position, 2, gl.FLOAT, false, FSIZE * 4, 0)
+    gl.vertexAttribPointer(a_Position, 3, gl.FLOAT, false, FSIZE * 6, 0)
     // 链接a_Position 变量与分配给他的缓存区对象
     gl.enableVertexAttribArray(a_Position) // 开启分配
 
-
-    // 将顶点尺寸写入缓存区对象并开启
-    let a_TexCoord = gl.getAttribLocation(gl.program, 'a_TexCoord')
-    //                                               归一化  向量值      偏移量
-    gl.vertexAttribPointer(a_TexCoord, 2, gl.FLOAT, false, FSIZE * 4, FSIZE * 2)
-    gl.enableVertexAttribArray(a_TexCoord) // 开始缓存区分配
+    let a_Color = gl.getAttribLocation(gl.program, 'a_Color')
+    if (a_Color < 0){
+        console.log('Failed to get the storage location of a_Color')
+        return  -1
+    }
+    gl.vertexAttribPointer(a_Color, 3 ,gl.FLOAT, false, FSIZE * 6, FSIZE * 3)
+    gl.enableVertexAttribArray(a_Color)
+    gl.bindBuffer(gl.ARRAY_BUFFER, null) // 取消绑定的缓存区对象
     return n
-}
-
-function initTexTrues(gl, n) {
-    // 创建纹理对象
-    let texture0 = gl.createTexture()
-    let texture1 = gl.createTexture()
-
-    // 获取 u_samplaer 存储位置
-    let u_Sampler0 = gl.getUniformLocation(gl.program, 'u_Sampler0')
-    let u_Sampler1 = gl.getUniformLocation(gl.program, 'u_Sampler1')
-    // 创建一个image 对象
-    let image0 = new Image()
-    let image1 = new Image()
-    image0.onload = function (){
-        loadTexture(gl,n, texture0, u_Sampler0, image0, 0)
-    }
-    image1.onload = function (){
-        loadTexture(gl,n, texture1, u_Sampler1, image1, 1)
-    }
-    image0.src = "../../WebGL-Programming-Guide/resources/redflower.jpg"
-    image1.src = "../../WebGL-Programming-Guide/resources/circle.gif"
-    return true;
-}
-// 用于标记纹理单元是否已经就绪
-let g_texUnit0 = false, g_texUnit1 = false
-function loadTexture(gl,n, texture, u_Sampler, image, texUnit){
-    // 由于图像的坐标系统的 y 轴 和webgl 的坐标系统是相反的 所以需要对齐进行y轴反转
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1) // 对纹理图像进行 y 轴反转
-
-    // 激活纹理
-    if (texUnit == 0){
-        gl.activeTexture(gl.TEXTURE0);
-        g_texUnit0 = true
-    }else{
-        gl.activeTexture(gl.TEXTURE1)
-        g_texUnit1 = true
-    }
-    //
-    // 开启 0 号纹理单元  必须绑定纹理, 默认有 8 个纹理单元
-    // gl.activeTexture(gl.TEXTURE0)
-
-    // 向target 绑定纹理对象 TEXTURE_2D 二维纹理 TEXTURE_CUBE_MAP 立方体纹理
-    // 绑定纹理到目标上
-    gl.bindTexture(gl.TEXTURE_2D, texture)
-
-    // 配置纹理参数
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
-
-    // 配置纹理图像
-    gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA, gl.UNSIGNED_BYTE, image)
-
-    // 将纹理单元编号传递给取样器
-    gl.uniform1i(u_Sampler, texUnit )
-    // 绘制矩形
-    if (g_texUnit0 && g_texUnit1){
-        gl.drawArrays(gl.TRIANGLE_STRIP, 0, n)
-    }
-
 }
