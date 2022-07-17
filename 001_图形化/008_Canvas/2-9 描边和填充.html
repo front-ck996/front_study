@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<canvas id="canvas" style="width: 1350px;height: 900px;background: pink"></canvas>
+</body>
+</html>
+<script>
+
+    const context = document.getElementById('canvas').getContext('2d')
+    const equipmentdevPixe = window.devicePixelRatio || 1
+    canvas.width = canvas.clientWidth * equipmentdevPixe
+    canvas.height = canvas.clientHeight * equipmentdevPixe
+
+    function drawGrid(context, color, stepx, stepy) {
+
+    }
+
+    drawGrid(context, 'lightgray', 10, 10)
+
+    // drwaing attributes
+    context.font = '48pt Helvetica'
+    context.strokeStyle = 'blue'
+    context.fillStyle = 'red'
+    context.lineWidth = '2'
+
+    // text
+    context.strokeText('stroke', 60, 110)
+    context.fillText('Fill', 440, 110)
+
+    // Rectangles
+    context.lineWidth = '5'
+    context.beginPath()
+    context.rect(750, 150, 150, 100)
+    context.stroke()
+    context.fill()
+    context.beginPath()
+
+    context.rect(750, 150, 150, 100)
+    context.stroke()
+    context.beginPath()
+
+    context.arc(150, 370, 60, 0, Math.PI * 3 / 2)
+    context.stroke()
+    context.beginPath()
+
+
+    context.arc(475, 550, 60, 0, Math.PI * 3 / 2)
+    context.stroke()
+    context.clearRect()
+    context.fill()
+
+    context.arc(820, 550, 60, 0, Math.PI * 3 / 2)
+    context.stroke()
+    context.clearRect()
+    context.stroke()
+    context.fill()
+</script>

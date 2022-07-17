@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<canvas id="canvas" style="width: 400px;height: 300px;background: pink"></canvas>
+</body>
+</html>
+<script>
+
+
+    var canvas = document.getElementById('canvas')
+
+    // 获取屏幕像素比
+    const equipmentdevPixe =  window.devicePixelRatio || 1
+    canvas.width = canvas.clientWidth * equipmentdevPixe
+    canvas.height = canvas.clientHeight * equipmentdevPixe
+
+    const context = canvas.getContext('2d')
+
+    const shadowColor = 'rgba(0,0,0,0.7)'
+    function setIconShadow(){
+        context.shadowColor = shadowColor // 颜色
+        context.shadowOffsetX = -1   // 水平偏移
+        context.shadowOffsetY = -1   // 垂直偏移
+        context.shadowBlur = 2     // 阴影大小
+    }
+    function setSelectedIconShadow(){
+        context.shadowColor = shadowColor
+        context.shadowOffsetX = 4
+        context.shadowOffsetY = 4
+        context.shadowBlur = 5
+    }
+    // 填充矩形
+    setSelectedIconShadow()
+    setIconShadow()
+    context.fillRect(10, 10, 200, 200)
+
+</script>
