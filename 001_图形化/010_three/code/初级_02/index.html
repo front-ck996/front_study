@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+        html,body{
+            padding: 0;
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
 
@@ -12,5 +18,28 @@
 </html>
 <script src="../../lib/three.js"></script>
 <script>
-    // THREE.ReverseSubtractEquation //查看版本号
+    // 四大组件 相机 场景 摄像机 几何体
+    var serene = new THREE.Scene()
+
+    var camera = new THREE.PerspectiveCamera(75 ,window.innerWidth / window.innerHeight, 1, 500000)
+
+    var renderer = new THREE.WebGLRenderer()
+
+    // 设置绘制完成之后的颜色
+    renderer.setClearColor(0xffffff)
+    renderer.setSize(window.innerWidth, window.innerHeight)
+    document.body.appendChild(renderer.domElement)
+    var geometry = new THREE.BoxGeometry(2,2,2)
+    var material = new THREE.MeshBasicMaterial({color: 0xff0000})
+    var cube = new THREE.Mesh(geometry, material)
+
+    serene.add(cube)
+    let renderSum = 1
+    camera.position.z  = 5
+    function render(){
+        requestAnimationFrame(render)
+        renderSum++
+        renderer.render(serene, camera)
+    }
+    render()
 </script>

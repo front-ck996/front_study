@@ -4,7 +4,7 @@
  *
  * License:
  *
- * Permission is hereby granted, free of charge, to any person 
+ * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation files
  * (the "Software"), to deal in the Software without restriction,
  * including without limitation the rights to use, copy, modify, merge,
@@ -31,7 +31,7 @@
 
 var canvas = document.getElementById('canvas'),
     context = canvas.getContext('2d');
-   
+
 context.font = '38pt Arial';
 context.fillStyle = 'cornflowerblue';
 context.strokeStyle = 'blue';
@@ -39,5 +39,4 @@ context.strokeStyle = 'blue';
 context.fillText("Hello Canvas", canvas.width/2 - 150,
                                  canvas.height/2 + 15);
 
-context.strokeText("Hello Canvas", canvas.width/2 - 150,
-                                   canvas.height/2 + 15 );
+context.strokeText("Hello Canvas", canvas.width/2 - 150, canvas.height/2 + 15 );
